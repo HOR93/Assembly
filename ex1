@@ -1,0 +1,32 @@
+Exercicio 1
+
+
+Escreva a sub-rotina MENOR que recebe em R5 o endereço de início de um vetor de bytes (sem
+sinal) e retorna:
+• R6 -> menor elemento do vetor e
+• R7 -> qual sua frequência (quantas vezes apareceu)
+
+
+
+
+		MOV		#VETOR,R5
+		CALL		#MENOR
+		JMP		$
+
+MENOR:		MOV.B 		@R5+,R6 ; pega o conteudo de R5 E BOTA EM R6 AVANÇANDO +1 ELEMENTO
+		MOV.B		@R5+,R8 ; pega o conteudo de R5 E BOTA EM R8 AVANÇANDO +1 ELEMENTO
+                MOV		#1,R7   ; FREQUENCIA
+
+LOOP:		cmp.b		R6,R5   ; COMPARA O ELEMENTO NO VETOR
+		jeq		IGUAL   ; CASO SEJA IGUAL
+		jhs		MAIOR   ; CASO SEJA MAIOR
+
+IGUAL:		INC		R7 ; SE FOR IGUAL ADICIONA MAIS 1 NA FREQUENCIA
+
+MAIOR:		INC		R5 ; VAI PRO PROXIMO ELEMENTO
+		DEC		R8 ; TIRA DO CONTADOR
+		JNZ		LOOP
+		RET
+
+			.data
+vetor:		.byte 8,"HENRIQUE"
