@@ -1,0 +1,28 @@
+Exerc 2
+
+		
+
+
+			MOV		#VETOR,R5
+			CALL		#MAIOR16
+			JMP		$
+
+MAIOR16:		MOV.B		@R5+,R6
+			MOV.B		@R5+,R8
+			MOV		#1,R7
+
+LOOP:			COMP.B		R5,R6		
+			jeq		IGUAL   ; CASO SEJA IGUAL
+			jlo		MENOR	; CASO SEJA MAIOR
+
+IGUAL:			INC		R7
+
+
+MENOR:			INC		R5
+			DEC		R8
+			JNZ		LOOP
+			NOP
+			RET
+
+			.data
+vetor:		.byte 8,"HENRIQUE"	
