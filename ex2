@@ -26,3 +26,50 @@ MENOR:			INC		R5
 
 			.data
 vetor:		.byte 8,"HENRIQUE"	
+
+
+
+;.............................................................................................
+
+
+
+#MAIOR16
+Onde  R6 = MAIOR elemento do vetor, R7 = qual sua frequência DO menor elemento, r8 = contador, R9 = qual letra no elemento
+
+MAIN:
+
+		MOV.W 	#VETOR, R5		;Faz copia do VETOR com meu nome para R5
+		CALL  	#MAIOR16		;Chamando a subrotina MENOR
+		JMP   	$			;TRAVA NESSA LINHA
+
+MAIOR16:
+		TST.B	R8			;CONFERIR SE R8 = 0, SE FOR, VAI DIRETO PRO FIM (jz = IF ZERO)
+		JZ	#FIM
+
+		MOV.B	@R5+,R8			;R8 = vai pegar todo tamanho do vetor
+		MOV.B	@R5+,R6			;R6 = vai pegar todo tamanho do vetor E ir pro PROXIMO
+		MOV.B	#1,R7			;Iniciando R7 como frequencia com 1
+		JMP	#PROXIMO
+
+LOOP:		
+		MOV.B	@R5+,R9			;R9 = vai pegar todo tamanho do vetor
+
+		CMP.B	R6,R9			;IF R9 < R6 ( Só ve isso dessa forma)
+		JHS	#PROXIMO		;r6 é menor, então vai pro proximo LOOP
+		MOB.V 	R6,R9			;CASO CONTRARIO PASSA O VALOR DE R6 PARA R9
+		JEQ	#IGUAL			; igual
+
+
+PROXIMO:	
+		INC	R7
+		DEC	R8			;É MENOR, TIRA 1 DO CONTADOR E VOLTA PRO LOOP (JNZ = IF NOT ZERO)
+		JNZ	#LOOP
+
+
+IGUAL:		
+		INC 	R7
+		JNZ	#LOOP
+
+
+FIM:
+		RET	
