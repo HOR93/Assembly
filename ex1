@@ -76,3 +76,67 @@ IGUAL:
 
 FIM:
 		RET	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+......................................................................................................................................
+
+
+
+;R5 = VETOR, R6 = MENOR, R7 = frequencia, R8 = contador, R9 = ATUAL LETRA
+
+main:
+			mov.w	#vetor, R5
+			call	#MENOR
+			jmp		$
+
+MENOR:
+			clr		R7
+			mov.b	@R5+,R8
+			mov.b	@R5+,R6
+
+LOOP:
+			cmp.b	@R5+,R6
+			tst.b	R8
+			jz		FIM
+
+			jlo		R6MENOR
+
+			jeq		IGUAL
+
+R6MENOR:
+			dec		R8
+			jmp		LOOP
+
+IGUAL:
+			inc		R7
+			dec		R8
+			jmp		LOOP
+
+FIM:
+			ret
+;-------------------------------------------------------------------------------
+; Stack Pointer definition
+;-------------------------------------------------------------------------------
+            .global __STACK_END
+            .sect   .stack
+            
+;-------------------------------------------------------------------------------
+; Interrupt Vectors
+;-------------------------------------------------------------------------------
+            .sect   ".reset"                ; MSP430 RESET Vector
+            .short  RESET
+            
+            .data
+vetor:		.byte	8, "Henrique"
