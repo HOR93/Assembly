@@ -123,3 +123,91 @@ FIM:
             
             .data
 vetor:		.byte	8, "Henrique"
+
+
+
+
+
+
+
+
+
+
+
+
+
+;-------------------------------------------------------------------------------
+; Main loop here
+;-------------------------------------------------------------------------------
+;R5 = vetor, R6 = receber o MAIOR, R7 = Frequencia, R8 = contador, R9 = Registrador temporario
+
+main:
+			mov		#VETOR,R5
+			mov		#0,R8
+			mov		#0,R7
+
+
+			mov.b	@R5,R8 					;Passando o endereço para o Contador
+			incd	R5						;Passando o endereço para o Contador
+			dec.b	R8
+
+			call	#MAIOR16
+			jmp		$
+			nop
+
+
+MAIOR16:
+			incd	R5
+			mov		@R5,R9
+
+			dec.b	R8
+			jz		FIM
+
+			cmp		R9,R6
+			jeq		IGUAL					;Iguais então aumenta a frequencia
+			jhs		MAIOR16					;se R6 > R5 = R6
+			mov		R9,R6  					;se R6 < R5 = R5
+			clr		R7
+
+IGUAL:
+			inc		R7
+			jmp		MAIOR16
+			nop
+
+FIM:
+			ret
+
+;-------------------------------------------------------------------------------
+; Stack Pointer definition
+;-------------------------------------------------------------------------------
+            .global __STACK_END
+            .sect   .stack
+            
+;-------------------------------------------------------------------------------
+; Interrupt Vectors
+;-------------------------------------------------------------------------------
+            .sect   ".reset"                ; MSP430 RESET Vector
+            .short  RESET
+
+
+            .data
+VETOR: 		.byte 11,0, "JOAQUIMJOSE",0
+
+
+
+
+
+
+
+
+MAIOR8: 	CLR.B R10 		;Maior elemento provisório = Zero 
+ 		MOV.B @R5+,R6 		;R6 = tamanho e incrementa R5 
+
+LOOP: 		CMP.B @R5,R10 		;Comparar: R10 - @R5 
+ 		JHS LB 			;Se R10 >= @R5, saltar para LB 
+ 		MOV.B @R5,R10 		;Senão, copiar novo maior para R10 
+
+LB: 		INC.W R5 		;Avançar ponteiro 
+ 		DEC.B R6 		;Decrementar contador 
+ 		JNZ LOOP 		;Repetir se contador diferente de zero 
+		RET 			;Retornar se contador igual a zero
